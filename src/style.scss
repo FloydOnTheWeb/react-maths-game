@@ -1,0 +1,42 @@
+$theme-colors: ("info": tomato,
+    "danger": teal);
+// Override default variables before the import
+$body-bg: teal;
+// Import Bootstrap and its default variables
+@import '~bootstrap/scss/bootstrap.scss';
+
+.navbar-brand {
+    text-align: center;
+    width: 100%;
+}
+
+.gameQuestion {
+    background-color: #ffc107;
+
+    p {
+        font-size: 2em;
+        text-align: center;
+        color: #333333;
+    }
+}
+
+.gameStats {
+    .timerClock {
+        color: #ffffff;
+        vertical-align: middle;
+        text-align: left;
+    }
+
+    .gameScore {
+        color: #ffffff;
+        vertical-align: middle;
+        text-align: right;
+    }
+}
+
+Button.gameOption {
+    font-size: 2em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    vertical-align: middle;
+}
