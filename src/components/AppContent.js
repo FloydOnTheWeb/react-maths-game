@@ -8,9 +8,28 @@ export class AppContent extends Component {
     this.state = {
       myScore: 0,
       gameOptions: [],
+      gameQuestionText: "",
+      startTime: new Date().toLocaleTimeString(),
       timeElapsed: new Date().toLocaleTimeString(),
     };
+    this.updateTimer = this.updateTimer.bind(this);
+    this.generateQuestion = this.generateQuestion.bind(this);
   }
+
+  componentDidMount() {
+    this.generateQuestion();
+    setInterval(() => {
+      this.updateTimer();
+    }, 1000);
+  }
+
+  componentDidUpdate(prevProps, prevState) {}
+
+  updateTimer = () => {
+    var currentTime = this.state.timeElapsed;
+    this.setState({ timeElapsed: currentTime });
+    // console.log("tick");
+  };
 
   randomNumber = (min, max) => {
     return Math.round(Math.random() * (max - min) + min);
@@ -19,7 +38,7 @@ export class AppContent extends Component {
   generateQuestion = () => {
     let mathTask = ["add", "sub", "mul", "div"];
     var gameAnswer = 0;
-    let questionText = "";
+    var questionText = "";
     let randomNumberOne = this.randomNumber(50, 100);
     let randomNumberTwo = this.randomNumber(1, 49);
     randomNumberOne = Math.max(randomNumberOne, randomNumberTwo);
@@ -60,20 +79,19 @@ export class AppContent extends Component {
       default:
         questionText = "There was an error, please refresh and try again!";
     }
-    console.log("executed"); //check instances
+    this.setState({ gameQuestionText: questionText });
     this.generatePossibeSolutions(gameAnswer);
-    return questionText;
   };
 
   generatePossibeSolutions = (solution) => {
-    // TODO: correct mutate state
-    this.state.gameOptions[0] = solution;
-    this.state.gameOptions[1] = solution + this.randomNumber(1, 4);
-    this.state.gameOptions[2] = solution + this.randomNumber(4, 6);
-    this.state.gameOptions[3] = solution + this.randomNumber(7, 9);
+    let optionValues = [];
+    optionValues[0] = solution;
+    optionValues[1] = solution + this.randomNumber(1, 4);
+    optionValues[2] = solution + this.randomNumber(5, 6);
+    optionValues[3] = solution + this.randomNumber(7, 9);
+    this.setState({ gameOptions: optionValues });
     // TODO: handle duplicate values
     this.shuffleOptions(this.state.gameOptions);
-    return this.gameOptions;
   };
 
   shuffleOptions = (array) => {
@@ -85,9 +103,10 @@ export class AppContent extends Component {
     }
   };
 
-  finalScore = () => {
+  updateScore = () => {
     return (
-      "Your Final Score is " + this.state.timeElapsed / this.state.myScore + ""
+      // "Your Final Score is " + this.state.timeElapsed / this.state.myScore + ""
+      console.log(this.myScore)
     );
   };
 
@@ -105,14 +124,20 @@ export class AppContent extends Component {
         <Row>
           <Col>
             <Jumbotron className="gameQuestion">
-              <p>{this.generateQuestion()}</p>
+              <p>{this.state.gameQuestionText}</p>
             </Jumbotron>
           </Col>
         </Row>
         <Row>
           {this.state.gameOptions.map((item, i) => (
             <Col key={i}>
-              <Button className="gameOption" variant="warning" size="lg" block>
+              <Button
+                id={i}
+                className="gameOption"
+                variant="warning"
+                size="lg"
+                block
+              >
                 {this.state.gameOptions[i]}
               </Button>
             </Col>
