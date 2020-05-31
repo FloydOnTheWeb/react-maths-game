@@ -3,7 +3,8 @@ $theme-colors: (
   "danger": teal,
 );
 // Override default variables before the import
-$body-bg: teal;
+$body-bg: #34495e;
+$gameColour: #f1c40f;
 // Import Bootstrap and its default variables
 @import "~bootstrap/scss/bootstrap.scss";
 
@@ -13,38 +14,40 @@ $body-bg: teal;
 }
 
 .gameQuestion {
-  background-color: #ffc107;
-
+  background-color: $gameColour;
+  padding: 2rem;
+  margin-bottom: 1rem;
   p {
-    font-size: 2em;
+    font-size: 1.8rem;
     text-align: center;
     color: #333333;
   }
 }
 
 .gameStats {
-  .timerClock {
-    color: #ffffff;
-    vertical-align: middle;
-    text-align: left;
-  }
-
   .gameScore {
     color: #ffffff;
     vertical-align: middle;
     text-align: right;
+    margin: 0;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+    font-size: 1em;
   }
 }
 
 Button.gameOption {
-  font-size: 2em;
-  padding-top: 1em;
-  padding-bottom: 1em;
+  font-size: 1.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
   vertical-align: middle;
+  background-color: $gameColour;
 
   &:hover {
-    background-color: orange;
-    color: #ffffff;
+    background-color: $gameColour;
   }
-  
+}
+
+.brand-logo {
+  font-size: 0.8rem;
 }

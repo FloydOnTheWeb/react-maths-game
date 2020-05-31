@@ -6,30 +6,17 @@ export class AppContent extends Component {
     super(props);
 
     this.state = {
-      myScore: 0,
+      gameScore: 0,
       gameOptions: [],
+      gameAnswer: 0,
       gameQuestionText: "",
-      startTime: new Date().toLocaleTimeString(),
-      timeElapsed: new Date().toLocaleTimeString(),
+      gameTime: 0,
     };
-    this.updateTimer = this.updateTimer.bind(this);
-    this.generateQuestion = this.generateQuestion.bind(this);
   }
 
   componentDidMount() {
     this.generateQuestion();
-    setInterval(() => {
-      this.updateTimer();
-    }, 1000);
   }
-
-  componentDidUpdate(prevProps, prevState) {}
-
-  updateTimer = () => {
-    var currentTime = this.state.timeElapsed;
-    this.setState({ timeElapsed: currentTime });
-    // console.log("tick");
-  };
 
   randomNumber = (min, max) => {
     return Math.round(Math.random() * (max - min) + min);
@@ -37,12 +24,10 @@ export class AppContent extends Component {
 
   generateQuestion = () => {
     let mathTask = ["add", "sub", "mul", "div"];
-    var gameAnswer = 0;
+    var getAnswer = 0;
     var questionText = "";
     let randomNumberOne = this.randomNumber(50, 100);
     let randomNumberTwo = this.randomNumber(1, 49);
-    randomNumberOne = Math.max(randomNumberOne, randomNumberTwo);
-    randomNumberTwo = Math.min(randomNumberOne, randomNumberTwo);
     let showQuestion = mathTask[Math.floor(Math.random() * mathTask.length)];
     if (showQuestion === "div" && randomNumberOne % randomNumberTwo !== 0) {
       showQuestion = "add";
@@ -55,12 +40,12 @@ export class AppContent extends Component {
           " and " +
           randomNumberTwo +
           "?";
-        gameAnswer = randomNumberOne + randomNumberTwo;
+        getAnswer = randomNumberOne + randomNumberTwo;
         break;
       case "sub":
         questionText =
           "What is " + randomNumberOne + " minus " + randomNumberTwo + "?";
-        gameAnswer = randomNumberOne - randomNumberTwo;
+        getAnswer = randomNumberOne - randomNumberTwo;
         break;
       case "mul":
         questionText =
@@ -69,18 +54,19 @@ export class AppContent extends Component {
           " multiplied by " +
           randomNumberTwo +
           "?";
-        gameAnswer = randomNumberOne * randomNumberTwo;
+        getAnswer = randomNumberOne * randomNumberTwo;
         break;
       case "div":
         questionText =
           "What is " + randomNumberOne + " divided by " + randomNumberTwo + "?";
-        gameAnswer = randomNumberOne / randomNumberTwo;
+        getAnswer = randomNumberOne / randomNumberTwo;
         break;
       default:
         questionText = "There was an error, please refresh and try again!";
     }
+    this.setState({ gameAnswer: getAnswer });
     this.setState({ gameQuestionText: questionText });
-    this.generatePossibeSolutions(gameAnswer);
+    this.generatePossibeSolutions(getAnswer);
   };
 
   generatePossibeSolutions = (solution) => {
@@ -89,9 +75,8 @@ export class AppContent extends Component {
     optionValues[1] = solution + this.randomNumber(1, 4);
     optionValues[2] = solution + this.randomNumber(5, 6);
     optionValues[3] = solution + this.randomNumber(7, 9);
+    this.shuffleOptions(optionValues);
     this.setState({ gameOptions: optionValues });
-    // TODO: handle duplicate values
-    this.shuffleOptions(this.state.gameOptions);
   };
 
   shuffleOptions = (array) => {
@@ -104,10 +89,19 @@ export class AppContent extends Component {
   };
 
   updateScore = () => {
-    return (
-      // "Your Final Score is " + this.state.timeElapsed / this.state.myScore + ""
-      console.log(this.myScore)
-    );
+    this.setState({ gameScore: this.state.gameScore + 1 });
+  };
+
+  handleClick = (e) => {
+    e.preventDefault();
+    var selectedOption = Number(e.target.innerHTML);
+    if (selectedOption === this.state.gameAnswer) {
+      this.updateScore(selectedOption);
+      alert("Congratulations! that is correct");
+    } else {
+      alert("Wrong, please try again!");
+    }
+    this.generateQuestion();
   };
 
   render() {
@@ -115,10 +109,7 @@ export class AppContent extends Component {
       <div className="container">
         <Row className="gameStats">
           <Col>
-            <p className="timerClock">Time: {this.state.timeElapsed}</p>
-          </Col>
-          <Col>
-            <p className="gameScore">Score: {this.state.myScore}</p>
+            <p className="gameScore">Score: {this.state.gameScore}</p>
           </Col>
         </Row>
         <Row>
@@ -136,6 +127,7 @@ export class AppContent extends Component {
                 className="gameOption"
                 variant="warning"
                 size="lg"
+                onClick={this.handleClick}
                 block
               >
                 {this.state.gameOptions[i]}

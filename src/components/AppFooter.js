@@ -1,16 +1,17 @@
 import React, { Component } from "react";
+import { Navbar, Container, NavbarBrand } from "react-bootstrap";
 
 class AppFooter extends Component {
   render() {
     return (
-      <div>
-        <footer className="footer">
-          <div className="container">
-            <p>
-              <span className="text-muted">&copy; FloydOnTheWeb</span>
-            </p>
-          </div>
-        </footer>
+      <div className="fixed-bottom">
+        <Navbar>
+          <Container>
+            <NavbarBrand className="text-muted brand-logo">
+              &copy; FloydOnTheWeb
+            </NavbarBrand>
+          </Container>
+        </Navbar>
       </div>
     );
   }
