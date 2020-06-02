@@ -1,11 +1,11 @@
 $theme-colors: (
   "info": tomato,
-  "danger": teal,
+  "danger": red,
 );
-// Override default variables before the import
+
 $body-bg: #34495e;
 $gameColour: #f1c40f;
-// Import Bootstrap and its default variables
+
 @import "~bootstrap/scss/bootstrap.scss";
 
 .navbar-brand {
@@ -42,12 +42,26 @@ Button.gameOption {
   padding-bottom: 1rem;
   vertical-align: middle;
   background-color: $gameColour;
+  border-color: $gameColour;
+  color: #333333;
 
   &:hover {
-    background-color: $gameColour;
+    // background-color: $gameColour;
+    // border-color: $gameColour;
+    // color:#333333;
   }
 }
 
 .brand-logo {
   font-size: 0.8rem;
+}
+
+.message {
+  background: #fff;
+  display: block;
+  padding: 1em;
+  text-align: center;
+  width: inherit;
+  flex-wrap: wrap;
+  margin-top: 1em;
 }

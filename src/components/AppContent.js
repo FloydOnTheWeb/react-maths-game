@@ -10,7 +10,11 @@ export class AppContent extends Component {
       gameOptions: [],
       gameAnswer: 0,
       gameQuestionText: "",
-      gameTime: 0,
+      gameMessage: false,
+      gameResult: false,
+      optionsDisplay: true,
+
+      optionColour: "warning",
     };
   }
 
@@ -26,6 +30,8 @@ export class AppContent extends Component {
     let mathTask = ["add", "sub", "mul", "div"];
     var getAnswer = 0;
     var questionText = "";
+    this.setState({ gameResult: false });
+    this.setState({ optionDisplay: true });
     let randomNumberOne = this.randomNumber(50, 100);
     let randomNumberTwo = this.randomNumber(1, 49);
     let showQuestion = mathTask[Math.floor(Math.random() * mathTask.length)];
@@ -94,14 +100,17 @@ export class AppContent extends Component {
 
   handleClick = (e) => {
     e.preventDefault();
-    var selectedOption = Number(e.target.innerHTML);
+    this.setState({ optionDisplay: false });
+    var selectedOption = Number(e.target.value);
     if (selectedOption === this.state.gameAnswer) {
       this.updateScore(selectedOption);
-      alert("Congratulations! that is correct");
+      this.setState({ gameResult: true });
+      this.setState({ optionColour: "success" });
     } else {
-      alert("Wrong, please try again!");
+      this.setState({ gameResult: false });
+      this.setState({ optionColour: "danger" });
     }
-    this.generateQuestion();
+    this.setState({ gameMessage: true });
   };
 
   render() {
@@ -125,15 +134,29 @@ export class AppContent extends Component {
               <Button
                 id={i}
                 className="gameOption"
-                variant="warning"
+                // className = {`gameOption ${(this.state.gameResult)? '': 'incorrect'}`}
+                variant={this.state.optionColour}
                 size="lg"
+                value={this.state.gameOptions[i]}
                 onClick={this.handleClick}
+                disabled={!this.state.optionDisplay}
                 block
               >
                 {this.state.gameOptions[i]}
               </Button>
             </Col>
           ))}
+        </Row>
+        <Row>
+          <Col>
+            <div className="message">
+              <div>
+                <Button onClick={this.generateQuestion} variant="warning">
+                  Next
+                </Button>
+              </div>
+            </div>
+          </Col>
         </Row>
       </div>
     );
