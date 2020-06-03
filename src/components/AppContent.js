@@ -26,6 +26,7 @@ export class AppContent extends Component {
   generateQuestion = () => {
     this.setState({ gameResult: false });
     this.setState({ optionDisplay: true });
+    this.setState({ optionColour: "warning" });
     let mathTask = ["add", "sub", "mul", "div"];
     var getAnswer = 0;
     var questionText = "";
