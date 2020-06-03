@@ -6,15 +6,12 @@ export class AppContent extends Component {
     super(props);
 
     this.state = {
-      gameScore: 0,
-      gameOptions: [],
-      gameAnswer: 0,
       gameQuestionText: "",
-      gameMessage: false,
-      gameResult: false,
-      optionsDisplay: true,
-
+      gameOptions: [],
       optionColour: "warning",
+      gameAnswer: 0,
+      gameScore: 0,
+      gameResult: false,
     };
   }
 
@@ -27,11 +24,11 @@ export class AppContent extends Component {
   };
 
   generateQuestion = () => {
+    this.setState({ gameResult: false });
+    this.setState({ optionDisplay: true });
     let mathTask = ["add", "sub", "mul", "div"];
     var getAnswer = 0;
     var questionText = "";
-    this.setState({ gameResult: false });
-    this.setState({ optionDisplay: true });
     let randomNumberOne = this.randomNumber(50, 100);
     let randomNumberTwo = this.randomNumber(1, 49);
     let showQuestion = mathTask[Math.floor(Math.random() * mathTask.length)];
@@ -40,31 +37,19 @@ export class AppContent extends Component {
     }
     switch (showQuestion) {
       case "add":
-        questionText =
-          "What is the sum of " +
-          randomNumberOne +
-          " and " +
-          randomNumberTwo +
-          "?";
+        questionText = `What is the sum of ${randomNumberOne} and ${randomNumberTwo}?`;
         getAnswer = randomNumberOne + randomNumberTwo;
         break;
       case "sub":
-        questionText =
-          "What is " + randomNumberOne + " minus " + randomNumberTwo + "?";
+        questionText = `What is ${randomNumberOne} minus ${randomNumberTwo}?`;
         getAnswer = randomNumberOne - randomNumberTwo;
         break;
       case "mul":
-        questionText =
-          "What is " +
-          randomNumberOne +
-          " multiplied by " +
-          randomNumberTwo +
-          "?";
+        questionText = `What is ${randomNumberOne} multiplied by ${randomNumberTwo}?`;
         getAnswer = randomNumberOne * randomNumberTwo;
         break;
       case "div":
-        questionText =
-          "What is " + randomNumberOne + " divided by " + randomNumberTwo + "?";
+        questionText = `What is ${randomNumberOne} divided by ${randomNumberTwo}?`;
         getAnswer = randomNumberOne / randomNumberTwo;
         break;
       default:
@@ -105,12 +90,13 @@ export class AppContent extends Component {
     if (selectedOption === this.state.gameAnswer) {
       this.updateScore(selectedOption);
       this.setState({ gameResult: true });
+      this.setState({ gameOptions: ["G", "O", "O", "D"] });
       this.setState({ optionColour: "success" });
     } else {
       this.setState({ gameResult: false });
+      this.setState({ gameOptions: ["N", "O", "P", "E"] });
       this.setState({ optionColour: "danger" });
     }
-    this.setState({ gameMessage: true });
   };
 
   render() {
@@ -134,7 +120,6 @@ export class AppContent extends Component {
               <Button
                 id={i}
                 className="gameOption"
-                // className = {`gameOption ${(this.state.gameResult)? '': 'incorrect'}`}
                 variant={this.state.optionColour}
                 size="lg"
                 value={this.state.gameOptions[i]}
@@ -151,7 +136,11 @@ export class AppContent extends Component {
           <Col>
             <div className="message">
               <div>
-                <Button onClick={this.generateQuestion} variant="warning">
+                <Button
+                  onClick={this.generateQuestion}
+                  disabled={this.state.optionDisplay}
+                  variant="warning"
+                >
                   Next
                 </Button>
               </div>
