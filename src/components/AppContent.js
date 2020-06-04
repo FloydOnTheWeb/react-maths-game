@@ -10,6 +10,7 @@ export class AppContent extends Component {
       gameOptions: [],
       optionColour: "warning",
       gameAnswer: 0,
+      gameAttempts: 0,
       gameScore: 0,
       gameResult: false,
     };
@@ -25,6 +26,7 @@ export class AppContent extends Component {
 
   generateQuestion = () => {
     this.setState({ gameResult: false });
+    this.setState({ gameAttempts: this.state.gameAttempts + 1 });
     this.setState({ optionDisplay: true });
     this.setState({ optionColour: "warning" });
     let mathTask = ["add", "sub", "mul", "div"];
@@ -105,7 +107,7 @@ export class AppContent extends Component {
       <div className="container">
         <Row className="gameStats">
           <Col>
-            <p className="gameScore">Score: {this.state.gameScore}</p>
+            <p className="gameScore">Score: {this.state.gameScore} / {this.state.gameAttempts}</p>
           </Col>
         </Row>
         <Row>
