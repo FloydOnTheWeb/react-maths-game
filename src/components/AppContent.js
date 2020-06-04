@@ -119,7 +119,7 @@ export class AppContent extends Component {
         </Row>
         <Row>
           {this.state.gameOptions.map((item, i) => (
-            <Col key={i}>
+            <Col sm key={i}>
               <Button
                 id={i}
                 className="gameOption"
